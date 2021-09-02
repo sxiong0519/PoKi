@@ -2,7 +2,7 @@
 
 SELECT * FROM Emotion;
 
-SELECT * FROM Poem;
+SELECT * FROM PoemEmotion;
 
 SELECT
 	COUNT(Id) as NumofPoem
@@ -76,3 +76,37 @@ FROM Author a
 JOIN Poem p ON a.Id = p.AuthorId
 GROUP BY a.Name
 ORDER BY COUNT(p.AuthorId) DESC;
+
+SELECT 
+	COUNT(PoemId) as NumOfSadPoems
+FROM PoemEmotion
+WHERE EmotionId = 3;
+
+SELECT 
+	COUNT(PoemId) as NumOfNOEMOTIONPoems
+FROM PoemEmotion
+WHERE EmotionId = NULL;
+
+SELECT TOP 1 e.Name AS 'Emotion'
+FROM Emotion e
+JOIN PoemEmotion pe ON e.Id = pe.EmotionId
+GROUP BY e.Name
+ORDER BY COUNT(pe.EmotionId);
+
+SELECT TOP 1 g.Name, COUNT(pe.EmotionId)
+FROM Grade g 
+JOIN Author a ON g.Id = a.GradeId
+JOIN Poem p ON a.Id = p.AuthorId
+JOIN PoemEmotion pe ON p.Id = pe.PoemId
+GROUP BY g.Name, pe.EmotionId
+HAVING pe.EmotionId = 4
+ORDER BY COUNT(pe.EmotionId) DESC;
+
+SELECT TOP 1 ge.Name, COUNT(pe.EmotionId)
+FROM Gender ge 
+JOIN Author a ON ge.Id = a.GenderId
+JOIN Poem p ON a.Id = p.AuthorId
+JOIN PoemEmotion pe ON p.Id = pe.PoemId
+GROUP BY ge.Name, pe.EmotionId
+HAVING pe.EmotionId = 2
+ORDER BY COUNT(pe.EmotionId);
